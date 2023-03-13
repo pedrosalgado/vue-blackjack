@@ -9,13 +9,15 @@ const store = tableStore()
 // const playerHand = ref(0)
 const playerHand = computed(() => store.getPlayerHand)
 const isWinner = computed(() => store.getIsPlayerWinner)
-const isPlayClosed = computed(() => store.getIsPlayclosed)
+const isPlayClosed = computed(() => store.getIsPlayClosed)
+const playerCash = computed(() => store.getPlayerCash)
 </script>
 
 <template>
   <div>
     <p>Player Hand</p>
     <p>Points: {{ store.playerPoints }}</p>
+    <p>Cash: {{ playerCash }}</p>
     <div v-if="isPlayClosed" class="result-container">
       <WinBanner v-if="isWinner"/>
       <LooseBanner v-else/>

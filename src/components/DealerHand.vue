@@ -9,7 +9,8 @@ const store = tableStore()
 // const playerHand = ref(0)
 const dealerHand = computed(() => store.getDealerHand)
 const isWinner = computed(() => !store.getIsPlayerWinner)
-const isPlayClosed = computed(() => store.getIsPlayclosed)
+const isPlayClosed = computed(() => store.getIsPlayClosed)
+const currentStake = computed(() => store.getCurrentStake)
 </script>
 
 <template>
@@ -20,11 +21,12 @@ const isPlayClosed = computed(() => store.getIsPlayclosed)
       <WinBanner v-if="isWinner"/>
       <LooseBanner v-else/>
     </div>
-    <div v-for="(card, index) in dealerHand" :key="card.value">
+    <div class="forclass" v-for="(card, index) in dealerHand" :key="card.value">
       <SingleCard :card="card" :faceDown="index === 1000" />
     </div>
   </div>
   <div class="result"></div>
+  <p>Stake: {{ currentStake }}</p>
 </template>
 
 <style></style>

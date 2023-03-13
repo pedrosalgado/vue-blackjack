@@ -28,9 +28,12 @@ export const tableStore = defineStore('table', {
     getIsPlayerWinner(state) {
       return state.winner === 'player'
     },
-    getIsPlayclosed(state){
+    getIsPlayClosed(state){
       return state.winner !== null
-    }
+    },
+    getCurrentStake(state){
+      return state.currentStake
+    },
   },
   actions: {
     createDeck() {
@@ -65,6 +68,7 @@ export const tableStore = defineStore('table', {
       this.deck = deck
       this.dealerPoints = this.countPoints(this.dealerHand)
       this.playerPoints = this.countPoints(this.playerHand)
+      this.makeBet()
       //at the end checks for initial blackjack
     },
     resetTable() {
@@ -78,6 +82,20 @@ export const tableStore = defineStore('table', {
         this.dealerMove()
       })
     },
+    makeBet(){
+      console.log('make bet')
+      this.playerCash--
+      this.currentStake++
+      console.log(this.playerPoints)
+    },
+    settleScore() {
+      const winner = this.winner
+      const playerPoints = this.playerPoints
+      this.currentStake = 0
+      if (winner === 'player') this.playerCash++
+      if (winner === 'player' && playerPoints === 21) this.playerCash + 2
+    }
+    ,
     async hit() {
       if (this.playerClosed) {
         this.dealerHand.push(this.deck[0])
@@ -140,6 +158,7 @@ export const tableStore = defineStore('table', {
         return
       }
       dealerPoints > playerPoints ? (this.winner = 'dealer') : (this.winner = 'player')
+      this.settleScore()
       // this.restartDeal()
     },
     split() {
