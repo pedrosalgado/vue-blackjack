@@ -1,15 +1,19 @@
 <script setup>
-import HomeHand from '@/components/HomeHand.vue'
+import DealerHand from '@/components/DealerHand.vue'
+import PlayerHand from '@/components/PlayerHand.vue'
+import PlayerBoard from '@/components/PlayerBoard.vue'
 import { tableStore } from '@/stores/table'
 import { onMounted } from 'vue'
 
 const store = tableStore()
 
-onMounted(store.createDeck)
+onMounted(store.initialDeal)
 </script>
 
 <template>
   <main>
-    <HomeHand />
+    <DealerHand />
+    <PlayerHand />
+    <PlayerBoard />
   </main>
 </template>

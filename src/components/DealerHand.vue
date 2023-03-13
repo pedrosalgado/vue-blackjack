@@ -7,24 +7,24 @@ import LooseBanner from "@/components/LooseBanner.vue";
 
 const store = tableStore()
 // const playerHand = ref(0)
-const playerHand = computed(() => store.getPlayerHand)
-const isWinner = computed(() => store.getIsPlayerWinner)
+const dealerHand = computed(() => store.getDealerHand)
+const isWinner = computed(() => !store.getIsPlayerWinner)
 const isPlayClosed = computed(() => store.getIsPlayclosed)
 </script>
 
 <template>
   <div>
-    <p>Player Hand</p>
-    <p>Points: {{ store.playerPoints }}</p>
+    <p>Dealer Hand</p>
+    <p v-if="isPlayClosed">Points: {{ store.dealerPoints }}</p>
     <div v-if="isPlayClosed" class="result-container">
       <WinBanner v-if="isWinner"/>
       <LooseBanner v-else/>
     </div>
-    <!--  <div>{{ playerHand }}</div>-->
-    <div v-for="card in playerHand" :key="card.value">
-      <SingleCard :card="card" :faceDown="false" />
+    <div v-for="(card, index) in dealerHand" :key="card.value">
+      <SingleCard :card="card" :faceDown="index === 1000" />
     </div>
   </div>
+  <div class="result"></div>
 </template>
 
 <style></style>
