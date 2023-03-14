@@ -1,18 +1,8 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/game">Game</RouterLink>
-      </nav>
-    </div>
-  </header>
-
   <RouterView />
 </template>
 
@@ -54,7 +44,7 @@ nav a:first-of-type {
 
 @media (min-width: 1024px) {
   header {
-    display: flex;
+    display: block;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
   }
