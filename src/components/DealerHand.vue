@@ -1,6 +1,6 @@
 <script setup>
 import { tableStore } from '@/stores/table'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import SingleCard from '@/components/SingleCard.vue'
 
 const store = tableStore()
@@ -8,6 +8,13 @@ const dealerHand = computed(() => store.getDealerHand)
 const isPlayClosed = computed(() => store.getIsPlayClosed)
 const isPlayerClosed = computed(() => store.getIsPlayerClosed)
 const currentStake = computed(() => store.getCurrentStake)
+const componentKey = ref(0)
+
+watch(isPlayClosed, () => {
+  if (!isPlayClosed.value) {
+    componentKey.value += 1
+  }
+})
 </script>
 
 <template>
@@ -15,7 +22,7 @@ const currentStake = computed(() => store.getCurrentStake)
     <p class="mb-3">Dealer Hand</p>
     <div class="flex">
       <div
-          v-if="isPlayClosed"
+        v-if="isPlayClosed"
         class="absolute rounded-full -top-4 -left-10 w-7 h-7 bg-orange-500 drop-shadow-md pt-0.5 text-center"
       >
         {{ store.dealerPoints }}
@@ -26,6 +33,7 @@ const currentStake = computed(() => store.getCurrentStake)
           :is-player-closed="isPlayerClosed"
           :face-down="index === 0"
           :index="(index += 10)"
+          :key="componentKey"
         />
       </div>
     </div>

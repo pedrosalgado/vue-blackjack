@@ -1,6 +1,6 @@
 <script setup>
 import { tableStore } from '@/stores/table'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import SingleCard from '@/components/SingleCard.vue'
 
 const store = tableStore()
@@ -8,17 +8,32 @@ const playerHand = computed(() => store.getPlayerHand)
 const winner = computed(() => store.getWinner)
 const isPlayClosed = computed(() => store.getIsPlayClosed)
 const playerCash = computed(() => store.getPlayerCash)
+const componentKey = ref(0)
+
+watch(isPlayClosed, () => {
+  if (!isPlayClosed.value) {
+    componentKey.value += 1
+  }
+})
 </script>
 
 <template>
   <div class="mt-20">
     <p class="mb-3">Player Hand</p>
-    <div class="absolute rounded-full top-4 -left-10 w-7 h-7 bg-orange-500 drop-shadow-md pt-0.5 text-center">
+    <div
+      class="absolute rounded-full top-4 -left-10 w-7 h-7 bg-orange-500 drop-shadow-md pt-0.5 text-center"
+    >
       {{ store.playerPoints }}
     </div>
     <div class="flex">
       <div v-for="(card, index) in playerHand" :key="index">
-        <SingleCard :card="card" :is-player-closed="true" :faceDown="false" :index="(index += 1)" />
+        <SingleCard
+          :card="card"
+          :is-player-closed="true"
+          :faceDown="false"
+          :index="(index += 1)"
+          :key="componentKey"
+        />
       </div>
     </div>
     <div

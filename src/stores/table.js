@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia'
-// import axios from 'axios'
-// import { toRaw } from 'vue'
 
 export const tableStore = defineStore('table', {
   state: () => ({
@@ -115,8 +113,8 @@ export const tableStore = defineStore('table', {
       const winner = this.winner
       const playerPoints = this.playerPoints
       this.currentStake = 0
-      if (winner === 'player') this.playerCash++
-      if (winner === 'player' && playerPoints === 21) this.playerCash += 2
+      if (winner === 'player') this.playerCash += 2
+      if (winner === 'player' && playerPoints === 21) this.playerCash += 3
       this.restartDeal()
     },
     async hit() {
@@ -147,10 +145,13 @@ export const tableStore = defineStore('table', {
       return str.length === 1 && str.match(/[A-Z]/i)
     },
     checkForWinOrBust() {
-      if (this.playerPoints >= 21) this.playerClosed = true
       if (this.playerPoints > 21) {
         this.winner = 'dealer'
         this.restartDeal()
+      }
+      if (this.playerPoints === 21) {
+        this.playerClosed = true
+        this.dealerMove()
       }
     },
     stand() {
@@ -163,18 +164,15 @@ export const tableStore = defineStore('table', {
       if (this.winner) return
       const playerPoints = this.playerPoints
       const dealerPoints = this.dealerPoints
-      if (dealerPoints === 21) {
+      if (dealerPoints >= 21) {
         this.resolveWinner()
-        return
-      }
-      if (dealerPoints > 21) {
-        this.restartDeal()
-        this.winner = 'player'
         return
       }
       if (dealerPoints <= 17 && dealerPoints <= playerPoints) {
         this.hit().then(() => {
-          this.dealerMove()
+          setTimeout(() => {
+            this.dealerMove()
+          }, 2000)
         })
       } else {
         this.resolveWinner()
@@ -188,7 +186,9 @@ export const tableStore = defineStore('table', {
         this.restartDeal()
         return
       }
-      dealerPoints > playerPoints ? (this.winner = 'dealer') : (this.winner = 'player')
+      dealerPoints > playerPoints && dealerPoints <= 21
+        ? (this.winner = 'dealer')
+        : (this.winner = 'player')
       this.settleScore()
     },
     split() {
