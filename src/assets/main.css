@@ -26,6 +26,7 @@ a,
     display: flex;
     place-items: center;
     background-color: #fff8dc;
+    color: #333;
   }
 
   #app {
